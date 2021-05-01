@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.3.xsd    
+	http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+    http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring 
+  	http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.2.xsd
+  	http://www.springframework.org/schema/security 
+  	http://www.springframework.org/schema/security/spring-security-4.3.xsd
+  	http://www.springframework.org/schema/security/oauth2 
+  	http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+  	http://www.springframework.org/schema/task 
+  	http://www.springframework.org/schema/task/spring-task-4.3.xsd
+  	http://www.springframework.org/schema/aop
+  	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+<!-- 	<context:component-scan base-package="com.oh" /> -->
+
+	<!-- datasource config -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxWaitMillis" value="${jdbc.maxWaitMillis}" />
+	</bean>
+
+	<!-- ========================================针对myBatis的配置项============================== -->
+	<!-- 配置sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描com/oh/dao/mapping/目录下的所有SQL映射的xml文件, 省掉Configuration.xml里的手工配置 
+			value="classpath:com/oh/dao/mapping/*.xml"指的是classpath(类路径)下com/oh/dao/mapping包中的所有xml文件 
+			UserMapper.xml位于com/oh/dao/mapping包下，这样UserMapper.xml就可以被自动扫描 -->
+		<property name="mapperLocations" value="classpath:com/oh/dao/mapping/*.xml" />
+<!-- 		<property name="plugins">
+			<list>
+				<props>
+					<prop key="printSql">true</prop>
+				</props>
+			</list>
+        </property> -->
+	</bean>
+	<!-- 配置扫描器 -->
+	<!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		扫描com.oh.dao.mapper这个包以及它的子包下的所有映射接口类
+		<property name="basePackage" value="com.oh.dao.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+ -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+<!--     <bean id="exceptionHandler" class="com.oh.comm.exception.MyExceptionHandler"/>  -->
+</beans>

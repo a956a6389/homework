@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config"
+	monitorInterval="300">
+	<Appenders>
+		<properties>
+			<property name="LOG_HOME">D:/logs</property>
+			<property name="DB_FILE_NAME">db</property>
+		</properties>
+		<Console name="stdout" target="SYSTEM_OUT">
+			<PatternLayout pattern="%5p [%t] (%F:%L) %d - %m%n" />
+		</Console>
+	<!-- 	<File name="run" fileName="D:/logs/run.log" append="false">
+			<PatternLayout pattern="%d %p %c{1.} [%t] %m%n" />
+		</File> -->
+		<RollingRandomAccessFile name="run"
+			fileName="D:/logs/run.log" filePattern="D:/logs/$${date:yyyy-MM}/run-%d{yyyy-MM-dd-HH}-%i.log" immediateFlush = "true">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 kb" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="errorFile"
+			fileName="D:/logs/errorFile.log" filePattern="D:/logs/$${date:yyyy-MM}/errorFile-%d{yyyy-MM-dd-HH}-%i.log" immediateFlush = "true">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 kb" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingRandomAccessFile>
+		<RollingFile name="db" fileName="D:/logs/db.log"
+			filePattern="D:/logs/$${date:yyyy-MM}/db-%d{yyyy-MM-dd-HH}-%i.log"
+			immediateFlush="true">
+			<PatternLayout pattern="%d %p [%F:%L] - %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="10 kb" />
+			</Policies>
+			<DefaultRolloverStrategy max="20" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="stdout" level="INFO" additivity="false">
+			<AppenderRef ref="stdout" />
+		</Logger>
+		<Logger name="run" level="DEBUG" additivity="false">
+			<AppenderRef ref="run" />
+			<AppenderRef ref="stdout" />
+		</Logger>
+		<Logger name="db" level="DEBUG" additivity="false">
+			<AppenderRef ref="db" />
+			<AppenderRef ref="stdout" />
+		</Logger>
+		<Logger name="errorFile" level="DEBUG" additivity="false">
+			<AppenderRef ref="errorFile" />
+			<AppenderRef ref="stdout" />
+		</Logger>
+		<Logger name="log4j.logger.com.ibatis" level="DEBUG" additivity="false">
+			<AppenderRef ref="stdout" />
+		</Logger>
+		<Logger name="log4j.logger.java.sq" level="DEBUG" additivity="false">
+			<AppenderRef ref="stdout" />
+		</Logger>
+		<Logger name="log4j.logger.com.springframework" level="DEBUG" additivity="false">
+			<AppenderRef ref="stdout" />
+		</Logger>
+		<Logger name="com.oh.dao" level="DEBUG" additivity="false">
+			<AppenderRef ref="stdout" />
+		</Logger>
+		
+		<Root level="INFO">
+			<!-- <AppenderRef ref="db" /> -->
+<!-- 			<AppenderRef ref="run" /> -->
+			<AppenderRef ref="stdout" />
+		</Root>
+	</Loggers>
+</Configuration>

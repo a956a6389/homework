@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="role">
+    <resultMap id="RoleMap" type="com.oh.bean.Role">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, role_name
+    </sql>
+
+    <select id="selectOneRole" parameterType="com.oh.bean.Role"
+        resultMap="RoleMap">
+        select
+        <include refid="Base_Column_List" />
+        from roles
+        <where>
+            <if test="id != null and id > 0">
+                id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="roleName != null">
+                 and role_name = #{roleName,jdbcType=VARCHAR}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from roles
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    
+    <delete id="batchDeleteRoles" parameterType="int">
+        delete from roles where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insert" parameterType="com.oh.bean.Role">
+        insert into roles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleName != null">
+                role_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleName != null">
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.oh.bean.Role">
+        update roles
+        <set>
+            <if test="roleName != null">
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryRoles" parameterType="java.util.Map" resultMap="RoleMap">
+        select
+        <include refid="Base_Column_List" />
+        from roles
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+</mapper>

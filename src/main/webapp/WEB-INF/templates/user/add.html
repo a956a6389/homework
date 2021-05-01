@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+	<meta charset="UTF-8" />
+	<title th:with="title=(${type} ? ${type} : 'Add') + ' User'" th:text="${title}"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+</head>
+<body>
+	<h1 th:text="${title}"></h1>
+	<div th:if="${error}" th:class="error" th:text="${error}">error.</div>
+	<div>
+		<form action="#" th:action="@{${action}}" method="post" th:object="${user}">
+			<p>
+				<label for="email" th:class="${#fields.hasErrors('email')} ? 'error' : 'text-right'">Email : </label> 
+				<input type="text" id="email" name="email" th:field="*{email}" th:errorclass="fieldError"/>
+                <span th:if="${#fields.hasErrors('email')}" th:class="error" th:errors="*{email}"/> 
+			</p>
+			<p>
+				<label for="password" th:class="${#fields.hasErrors('password')} ? 'error' : 'text-right'">Password : </label> 
+				<input type="password" id="password" name="password" th:field="*{password}" th:errorclass="fieldError"/>
+                <span th:if="${#fields.hasErrors('password')}" th:class="error" th:errors="*{password}"/> 
+			</p>
+			<p>
+				<label for="nickName" th:class="${#fields.hasErrors('nickName')} ? 'error' : 'text-right'">NickName : </label> 
+				<input type="text" id="nickName" name="nickName" th:field="*{nickName}" th:errorclass="fieldError"/>
+                <span th:if="${#fields.hasErrors('nickName')}" th:class="error" th:errors="*{nickName}"/> 
+			</p>
+			<p>
+				<label for="status" th:class="${#fields.hasErrors('status')} ? 'error' : 'text-right'">Status : </label> 
+				<select name ="status" th:switch="${status.toString()}">
+                    <option th:each="status : ${statuss}" th:text="${status}" th:value="${status}"/>
+                </select>
+                <span th:if="${#fields.hasErrors('status')}" th:class="error" th:errors="*{status}"/> 
+			</p>
+			<p>
+				<label for="role" th:class="${#fields.hasErrors('role')} ? 'error' : 'text-right'">Role : </label> 
+				<select name="role" >
+				    <option th:each="role, iterStat : ${roles}" th:text="${role.roleName}" th:value="${role.id}"/>
+				</select>
+                <span th:if="${#fields.hasErrors('role')}" th:class="error" th:errors="*{role}"/> 
+			</p>
+			
+			<input type="hidden" id="id" th:field="*{id}"/>
+			<button type="submit" class="btn">Submit</button>
+		</form>
+	</div>
+</body>
+</html>

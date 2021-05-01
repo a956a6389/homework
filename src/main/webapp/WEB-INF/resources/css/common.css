@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+.error{
+	color:#F00;
+}
+.fieldError{
+	border: 1px #F00 solid;
+}
+.successMsg{
+	color: #0F0;
+}

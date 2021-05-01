@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userRole">
+	<resultMap id="userRoleMap" type="com.oh.bean.UserRole">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="role_id" jdbcType="BIGINT" property="roleId" />
+		<result column="user_id" jdbcType="BIGINT" property="userId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, role_id, user_id
+	</sql>
+
+	<select id="selectOne" parameterType="com.oh.bean.UserRole"
+		resultMap="userRoleMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_roles
+		<where>
+			<if test="id != null and id > 0">
+				id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="roleId != null and roleId > 0">
+				and role_id = #{roleId,jdbcType=BIGINT}
+			</if>
+			<if test="userId != null and userId > 0">
+				and user_id = #{userId,jdbcType=BIGINT}
+			</if>
+		</where>
+		limit 1
+	</select>
+
+	<delete id="delete" parameterType="com.oh.bean.UserRole">
+		delete from user_roles
+		<where>
+			<if test="id != null and id > 0">
+				id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="roleId != null and roleId > 0">
+				and role_id = #{roleId,jdbcType=BIGINT}
+			</if>
+			<if test="userId != null and userId > 0">
+				and user_id = #{userId,jdbcType=BIGINT}
+			</if>
+		</where>
+	</delete>
+
+	<insert id="insert" parameterType="com.oh.bean.UserRole">
+		insert into user_roles
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null and roleId > 0">
+				role_id,
+			</if>
+			<if test="userId != null and userId > 0">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null and roleId > 0">
+				#{roleId,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null and userId > 0">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update" parameterType="com.oh.bean.UserRole">
+		update user_roles
+		<set>
+			<if test="roleId != null and roleId > 0">
+				role_id = #{roleId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where user_id = #{userId,jdbcType=BIGINT}
+	</update>
+	
+	<select id="findUserRoleByIds" parameterType="java.util.Map" resultMap="userRoleMap">
+        select
+        <include refid="Base_Column_List" />
+        from user_roles where id in
+        <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">  
+		    #{id}  
+		</foreach>  
+    </select>
+</mapper>

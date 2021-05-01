@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+	<meta charset="UTF-8" />
+	<title th:text="(${type} ? ${type} : 'Add') + ' Role'"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+</head>
+<body>
+	<h1 th:text="(${type} ? ${type} : 'Add') + ' Role'"></h1>
+	<div th:if="${error}" th:class="error" th:text="${error}">error.</div>
+	<div>
+		<form action="#" th:action="@{${action}}" method="post"
+			th:object="${role}">
+			<p>
+				<label for="roleName" th:class="${#fields.hasErrors('roleName')} ? 'error' : 'text-right'">Role Name : </label> 
+				<input type="text" id="roleName" name="roleName" th:field="*{roleName}" th:errorclass="fieldError"/>
+                <span th:if="${#fields.hasErrors('roleName')}" th:class="error" th:errors="*{roleName}"/> 
+			</p>
+			<input type="hidden" id="id" th:field="*{id}"/>
+			<button type="submit" class="btn">Submit</button>
+		</form>
+	</div>
+</body>
+</html>

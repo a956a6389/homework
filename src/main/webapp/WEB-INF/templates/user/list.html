@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8" />
+<title>User List</title>
+</head>
+<body>
+    <h1>User List</h1>
+    <div>
+         <a th:href="@{/user/add}">Add User</a> &nbsp;
+    </div>
+    <div>
+        <table border="1">
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Status</td>
+                <td>Role</td>
+                <td>Create Date</td>
+            </tr>
+            <tr th:each="user, iterStat : ${users}">
+                <td><a th:href="@{/user/view(id=${user.id})}" th:text="${user.id}"></a></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.status}"></td>
+                <td th:text="${user.role} ? ${user.role.roleName} : ''"></td>
+                <td th:text="${user.createDate}"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
