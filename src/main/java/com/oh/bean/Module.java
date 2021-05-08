@@ -6,6 +6,7 @@
 package com.oh.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @ClassName: Module
@@ -26,6 +27,11 @@ public class Module implements Serializable {
 	private String enName;
 	private String url;
 	private boolean urlEnabled = Boolean.TRUE.booleanValue();
+	private Date createdDate;
+	private Date updatedDate;
+	private Long createdBy;
+	private Long updatedBy;
+	
 	/**
 	 * @return the id
 	 */
@@ -85,6 +91,54 @@ public class Module implements Serializable {
 	 */
 	public void setEnName(String enName) {
 		this.enName = enName;
+	}
+	/**
+	 * @return the createdDate
+	 */
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	/**
+	 * @param createdDate the createdDate to set
+	 */
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	/**
+	 * @return the updatedDate
+	 */
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+	/**
+	 * @param updatedDate the updatedDate to set
+	 */
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+	/**
+	 * @return the createdBy
+	 */
+	public Long getCreatedBy() {
+		return createdBy;
+	}
+	/**
+	 * @param createdBy the createdBy to set
+	 */
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
+	}
+	/**
+	 * @return the updatedBy
+	 */
+	public Long getUpdatedBy() {
+		return updatedBy;
+	}
+	/**
+	 * @param updatedBy the updatedBy to set
+	 */
+	public void setUpdatedBy(Long updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 }
