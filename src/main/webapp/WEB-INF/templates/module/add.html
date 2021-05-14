@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+	<meta charset="UTF-8" />
+	<title th:with="title=(${type} ? ${type} : 'Add') + ' User'" th:text="${title}"></title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+</head>
+<body>
+	<h1 th:text="${title}"></h1>
+	<div th:if="${error}" th:class="error" th:text="${error}">error.</div>
+	<div>
+		<form action="#" th:action="@{${action}}" method="post" th:object="${module}">
+			<p>
+				<label for="cnName" th:class="${#fields.hasErrors('cnName')} ? 'error' : 'text-right'">CN Name : </label> 
+				<input type="text" id="cnName" name="cnName" th:field="*{cnName}" th:errorclass="fieldError"/>
+                <span th:if="${#fields.hasErrors('cnName')}" th:class="error" th:errors="*{cnName}"/> 
+			</p>
+			<p>
+				<label for="enName" th:class="${#fields.hasErrors('enName')} ? 'error' : 'text-right'">EN Name : </label> 
+				<input type="text" id="enName" name="enName" th:field="*{enName}" th:errorclass="fieldError"/>
+                <span th:if="${#fields.hasErrors('enName')}" th:class="error" th:errors="*{enName}"/> 
+			</p>
+			<p>
+				<label for="url" th:class="${#fields.hasErrors('url')} ? 'error' : 'text-right'">URL : </label> 
+				<input type="text" id="url" name="url" th:field="*{url}" th:errorclass="fieldError"/>
+                <span th:if="${#fields.hasErrors('url')}" th:class="error" th:errors="*{url}"/> 
+			</p>
+			
+			<input type="hidden" id="id" th:field="*{id}"/>
+			<button type="submit" class="btn">Submit</button>
+		</form>
+	</div>
+</body>
+</html>
