@@ -5,12 +5,15 @@
  */ 
 package com.oh.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.oh.bean.Module;
 
@@ -33,8 +36,12 @@ public class ModuleDaoImpl implements ModuleDao{
 	 * @see com.oh.service.ModuleService#queryModules()
 	 */
 	@Override
-	public List<Module> queryModules(Module module, Integer start, Integer end) {
-		List<Module> modules = baseDao.queryForList("module.queryModules", new Object[]{module, null == start ? 0 : start, null == end ? 1 : end});
+	public List<Module> queryModules(Module module, Integer start, Integer limit) {
+		Map<String, Object> param = new HashMap<>(3);
+		param.put("module", module);
+		param.put("start", start);
+		param.put("limit", limit);
+		List<Module> modules = baseDao.queryForList("module.queryModule", param);
 		LOG.info("all modules size={}", modules.size());
 		return modules;
 	}
@@ -70,6 +77,15 @@ public class ModuleDaoImpl implements ModuleDao{
 	@Override
 	public int updateModule(Module module) {
 		return baseDao.update("module.update", module);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.oh.dao.ModuleDao#queryModule(com.oh.bean.Module)
+	 */
+	@Override
+	public Module queryModule(Module module) {
+		List<Module> ms =  this.queryModules(module, 0, 1);
+		return CollectionUtils.isEmpty(ms) ? null : ms.get(0);
 	}
 
 }

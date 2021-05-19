@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8" />
+<title>403</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+</head>
+<body>
+	<h1>HTTP Status 403 - Access is denied</h1>
+	<div>
+		<h2 th:if="${username eq null}" th:text="No access permissions"></h2>
+		<h2 th:if="${username ne null}" th:text="|${username}, No access permissions|"></h2>
+	</div>
+</body>
+</html>

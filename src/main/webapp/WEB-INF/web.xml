@@ -7,7 +7,7 @@
 	<!-- 指定Spring Bean的配置文件所在目录。默认配置在WEB-INF目录下 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml,/WEB-INF/spring-security.xml</param-value>
+		<param-value>/WEB-INF/applicationContext.xml,/WEB-INF/spring-servlet.xml,/WEB-INF/spring-security.xml</param-value>
 	</context-param>
 
 	<!-- <context-param> <param-name>log4jConfiguration</param-name> <param-value>/WEB-INF/log4j2.properties</param-value> 

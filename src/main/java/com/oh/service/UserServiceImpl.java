@@ -69,7 +69,11 @@ public class UserServiceImpl implements UserService {
 		if(existsUser != null){
 			LOG.warn("User existis Email:{}", user.getEmail());
 		}
-		return userDao.insert(user);
+		int count = userDao.insert(user);
+		if(count > 0){
+			updateUserRole(existsUser);
+		}
+		return count;
 	}
 
 	public User queryUser(User user){
@@ -89,12 +93,43 @@ public class UserServiceImpl implements UserService {
 		}
 		int count = userDao.update(user);
 		if(count > 0){
-			UserRole userRole = new UserRole();
-			userRole.setRoleId(user.getRole().getId());
-			userRole.setUserId(user.getId());
-			userRoleService.insert(userRole);
+			updateUserRole(user);
 		}
 		return count;
+	}
+	
+	private void updateUserRole(User user){
+		UserRole userRole = new UserRole();
+		userRole.setRoleId(user.getRole().getId());
+		userRole.setUserId(user.getId());
+		UserRole userRoleExist = userRoleService.queryUserRole(userRole);
+		if(null == userRoleExist){
+			try {
+				userRoleService.insert(userRole);
+			} catch (Exception e) {
+				LOG.error("Insert user and role fail: {}", e);
+			}
+		}else{
+			userRoleService.update(userRole);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.oh.service.UserService#delete(Long)
+	 */
+	@Override
+	public int delete(Long id) {
+		User paramUser = new User();
+		paramUser.setId(id);
+		User u = this.queryUser(paramUser);
+		int count = userDao.delete(id);
+		if(count > 0 ){
+			UserRole userRole = new UserRole();
+			userRole.setRoleId(u.getRole().getId());
+			userRole.setUserId(id);
+			userRoleService.delete(userRole);
+		}
+		return 0;
 	}
 
 }

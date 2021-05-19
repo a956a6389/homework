@@ -1,0 +1,11 @@
+<div th:fragment="header">
+    <h2 sec:authorize="isAuthenticated()">
+        Hello <span sec:authentication="name"/>, Welcome to home work.
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Log out" />
+        </form>
+    </h2>
+    <h2 sec:authorize="isAnonymous()">
+        Welcome to home work.
+    </h2>
+</div>

@@ -6,6 +6,7 @@
 package com.oh.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.oh.bean.Module;
 
@@ -57,4 +58,11 @@ public interface ModuleService {
 	 * @return Module
 	 */
 	int updateModule(Module module);
+	
+	/***
+	 * 
+	 * @Description: return the map of all modules
+	 * @return Map<Integer, Module>
+	 */
+	Map<Integer, Module> queryAllModulesMap();
 }

@@ -5,10 +5,13 @@
  */ 
 package com.oh.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.oh.bean.Module;
 import com.oh.dao.ModuleDao;
@@ -22,6 +25,7 @@ import com.oh.dao.ModuleDao;
  */
 @Service
 public class ModuleServiceImpl implements ModuleService {
+	private static Map<Integer, Module> moduleCacheMap = new HashMap<>();
 	
 	@Autowired
 	private ModuleDao moduleDao;
@@ -39,7 +43,11 @@ public class ModuleServiceImpl implements ModuleService {
 	 */
 	@Override
 	public int insert(Module module) throws Exception {
-		return moduleDao.insert(module);
+		int count =  moduleDao.insert(module);
+		if(count > 0){
+			moduleCacheMap.put(module.getId(), module);
+		}
+		return count;
 	}
 
 	/* (non-Javadoc)
@@ -47,7 +55,11 @@ public class ModuleServiceImpl implements ModuleService {
 	 */
 	@Override
 	public int deleteModule(int id) {
-		return moduleDao.deleteModule(id);
+		int count =  moduleDao.deleteModule(id);
+		if(count > 0){
+			moduleCacheMap.remove(id);
+		}
+		return count;
 	}
 
 	/* (non-Javadoc)
@@ -63,7 +75,27 @@ public class ModuleServiceImpl implements ModuleService {
 	 */
 	@Override
 	public int updateModule(Module module) {
-		return moduleDao.updateModule(module);
+		int count =  moduleDao.updateModule(module);
+		if(count > 0){
+			moduleCacheMap.put(module.getId(), module);
+		}
+		return count;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.oh.service.ModuleService#queryAllModulesMap()
+	 */
+	@Override
+	public Map<Integer, Module> queryAllModulesMap() {
+		if(!CollectionUtils.isEmpty(moduleCacheMap)){
+			return moduleCacheMap;
+		}
+		
+		List<Module> modules = this.queryModules(null, null, null);
+		for (Module module : modules) {
+			moduleCacheMap.put(module.getId(), module);
+		}
+		return moduleCacheMap;
 	}
 
 }

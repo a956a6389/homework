@@ -49,4 +49,12 @@ public interface UserService {
 	* @throws Exception
 	 */
 	int update(User user) throws Exception;
+	
+	/**
+	 * 
+	 * @Description: delete user
+	 * @param id
+	 * @return int
+	 */
+	int delete(Long id);
 }

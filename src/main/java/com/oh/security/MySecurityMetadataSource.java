@@ -13,13 +13,18 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.stereotype.Service;
 
+import com.oh.bean.Module;
 import com.oh.bean.Role;
-import com.oh.dao.RoleDao;
+import com.oh.service.ModuleService;
+import com.oh.service.RoleModuleService;
 
 /**
  * @ClassName: MySecurityMetadataSource
@@ -28,11 +33,14 @@ import com.oh.dao.RoleDao;
  * @date Apr 13, 2017 1:48:45 PM
  *
  */
+@Service("mySecurityMetadataSource")
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
+	@Autowired
+	private ModuleService moduleService;
 
 	@Autowired
-	private RoleDao roleDao;
-	
+	private RoleModuleService roleModuleService;
+
 	private static Map<String, Collection<ConfigAttribute>> resourceMap = null;
 
 	/*
@@ -44,7 +52,14 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 	 */
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+		loadResourceDefine();
+		String requestUrl = ((FilterInvocation) object).getRequestUrl();
+		if(requestUrl.indexOf("?")>-1){
+			requestUrl = requestUrl.substring(0,requestUrl.indexOf("?"));
+		}
+		if(MapUtils.isNotEmpty(resourceMap)){
+			return resourceMap.get(requestUrl);
+		}
 		return null;
 	}
 
@@ -71,18 +86,30 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 		// TODO Auto-generated method stub
 		return true;
 	}
-	
-	@PostConstruct
+
+//	@PostConstruct
 	private void loadResourceDefine() {
 		if (resourceMap == null) {
 			resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
-			List<Role> roles = roleDao.queryAllRoles();
-			for (Role role : roles) {
-				Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
-				ConfigAttribute configAttribute = new SecurityConfig("ROLE_" + role.getRoleName());
-				configAttributes.add(configAttribute);
-				resourceMap.put(resource.getResUrl(), configAttributes);
+			Map<Integer, List<Role>> moduleRoles = roleModuleService.readModuleToRoles();
+			Map<Integer, Module> moduleCacheMap = moduleService.queryAllModulesMap();
+			for (Map.Entry<Integer, List<Role>> entry : moduleRoles.entrySet()) {
+				Module tempModule = moduleCacheMap.get(entry.getKey());
+
+				for (Role role : entry.getValue()) {
+					if (!resourceMap.containsKey(tempModule.getUrl())) {
+						Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
+						ConfigAttribute configAttribute = new SecurityConfig("ROLE_" + role.getRoleName());
+						configAttributes.add(configAttribute);
+						resourceMap.put(tempModule.getUrl(), configAttributes);
+					}else{
+						Collection<ConfigAttribute> configAttributes = resourceMap.get(tempModule.getUrl());
+						ConfigAttribute configAttribute = new SecurityConfig("ROLE_" + role.getRoleName());
+						configAttributes.add(configAttribute);
+						resourceMap.put(tempModule.getUrl(), configAttributes);
+					}
+				}
 			}
 		}
-}
+	}
 }

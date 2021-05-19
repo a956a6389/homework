@@ -47,16 +47,17 @@ public class UserDetailService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User paramUser = new User();
 		paramUser.setEmail(username);
-		
+
 		User user = userService.queryUser(paramUser);
 		if (user == null)
 			throw new UsernameNotFoundException(username + " not exist!");
-		
+
 		Map<Integer, Role> roleMap = roleService.queryAllRolesMap();
 		user.setRole(roleMap.get(user.getRole().getId()));
-		
+
 		Collection<GrantedAuthority> grantedAuths = obtionGrantedAuthorities(user);
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), true, true, true, true, grantedAuths) ;
+		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword().trim(), true,
+				true, true, true, grantedAuths);
 	}
 
 	private Set<GrantedAuthority> obtionGrantedAuthorities(User user) {

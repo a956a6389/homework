@@ -7,31 +7,49 @@
         <id column="en_name" jdbcType="VARCHAR" property="enName" />
         <id column="url" jdbcType="VARCHAR" property="url" />
         <id column="url_enabled" jdbcType="TINYINT" property="urlEnabled" />
+        <id column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+        <id column="created_by" jdbcType="BIGINT" property="createdBy" />
+        <id column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+        <id column="updated_by" jdbcType="BIGINT" property="updatedBy" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, cn_name, en_name, url, url_enabled
+        id, cn_name, en_name, url, url_enabled, created_date, created_by, updated_date, updated_by
     </sql>
 
-    <select id="queryModule" resultMap="ModuleMap">
+    <select id="queryModule" resultMap="ModuleMap" parameterType="java.util.Map">
         select
         <include refid="Base_Column_List" />
         from module
         <where>
-            <if test="module.id != null and id > 0">
-                id = #{module.id,jdbcType=BIGINT}
-            </if>
-            <if test="module.cnName != null">
-                 and cn_name = #{module.cnName,jdbcType=VARCHAR}
-            </if>
-            <if test="module.enName != null">
-                 and en_name = #{module.enName,jdbcType=VARCHAR}
-            </if>
-            <if test="module.url != null">
-                 and url = #{module.url,jdbcType=VARCHAR}
-            </if>
-            <if test="module.urlEnabled">
-                 and url_enabled = #{module.urlEnabled,jdbcType=TINYINT}
+            <if test="module != null">
+	            <if test="module.id != null and module.id > 0">
+	                id = #{module.id,jdbcType=BIGINT}
+	            </if>
+	            <if test="module.cnName != null">
+	                 and cn_name = #{module.cnName,jdbcType=VARCHAR}
+	            </if>
+	            <if test="module.enName != null">
+	                 and en_name = #{module.enName,jdbcType=VARCHAR}
+	            </if>
+	            <if test="module.url != null">
+	                 and url = #{module.url,jdbcType=VARCHAR}
+	            </if>
+	            <if test="module.urlEnabled">
+	                 and url_enabled = #{module.urlEnabled,jdbcType=TINYINT}
+	            </if>
+	            <if test="module.createdDate">
+	                 and created_date = #{module.createdDate,jdbcType=TIMESTAMP}
+	            </if>
+	            <if test="module.updatedDate">
+	                 and updated_date = #{module.updatedDate,jdbcType=TIMESTAMP}
+	            </if>
+	            <if test="module.createdBy">
+	                 and created_by = #{module.createdBy,jdbcType=TINYINT}
+	            </if>
+	            <if test="module.updatedBy">
+	                 and updated_by = #{module.updatedBy,jdbcType=TINYINT}
+	            </if>
             </if>
         </where>
         <if test="start != null and limit != null">
@@ -64,7 +82,19 @@
                 url,
             </if>
             <if test="urlEnabled">
-                url_enabled
+                url_enabled,
+            </if>
+            <if test="createdDate">
+                created_date,
+            </if>
+            <if test="createdBy">
+                created_by,
+            </if>
+            <if test="updatedDate">
+                updated_date,
+            </if>
+            <if test="updatedBy">
+                updated_by
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -81,7 +111,19 @@
                 #{roleName,jdbcType=VARCHAR},
             </if>
             <if test="urlEnabled">
-                #{urlEnabled,jdbcType=TINYINT}
+                #{urlEnabled,jdbcType=TINYINT},
+            </if>
+            <if test="createdDate">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy">
+                #{createdBy,jdbcType=TINYINT},
+            </if>
+            <if test="updatedDate">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy">
+                #{updatedBy,jdbcType=TINYINT}
             </if>
         </trim>
     </insert>
@@ -100,6 +142,12 @@
             </if>
             <if test="urlEnabled != null">
                 url_enabled = #{urlEnabled,jdbcType=TINYINT},
+            </if>
+            <if test="updatedDate != null">
+                updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                updated_by = #{updatedBy,jdbcType=TINYINT},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}

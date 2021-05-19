@@ -6,7 +6,6 @@
 package com.oh.bean;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @ClassName: RoleModule
@@ -21,37 +20,52 @@ public class RoleModule implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Integer id;
 	
-	private Role role;
+	private Integer roleId;
 
-	private List<Module> module;
-
+	private Integer moduleId;
 
 	/**
-	 * @return the role
+	 * @return the id
 	 */
-	public Role getRole() {
-		return role;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
-	 * @param role the role to set
+	 * @param id the id to set
 	 */
-	public void setRole(Role role) {
-		this.role = role;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**
-	 * @return the module
+	 * @return the roleId
 	 */
-	public List<Module> getModuleEntity() {
-		return module;
+	public Integer getRoleId() {
+		return roleId;
 	}
 
 	/**
-	 * @param module the module to set
+	 * @param roleId the roleId to set
 	 */
-	public void setModuleEntity(List<Module> module) {
-		this.module = module;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
+
+	/**
+	 * @return the moduleId
+	 */
+	public Integer getModuleId() {
+		return moduleId;
+	}
+
+	/**
+	 * @param moduleId the moduleId to set
+	 */
+	public void setModuleId(Integer moduleId) {
+		this.moduleId = moduleId;
+	}
+
 }

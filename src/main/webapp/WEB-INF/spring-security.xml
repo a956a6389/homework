@@ -7,29 +7,53 @@
 
 	<!-- 静态资源，不用权限 -->
 	<http pattern="/resources/**" security="none" />
-	<http pattern="/" security="none" />
-	<http pattern="/index" security="none" />
+	<http pattern="/css/**" security="none" />
+	<http pattern="/js/**" security="none" />
+	<!-- <http pattern="/" security="none" /> -->
+	<!-- <http pattern="/index" security="none" /> -->
+<!-- 	<http pattern="/login/index" security="none" /> -->
+<!-- 	<http pattern="/logout" security="none" /> -->
+	<http pattern="/login/denied" security="none" />
 	<http pattern="/favicon.ico" security="none" />
 
-	<http access-decision-manager-ref="/denied" use-expressions="true"
-		auto-config="false">
+	<http access-decision-manager-ref="myAccessDecisionManager"
+		use-expressions="true" auto-config="false">
 		<intercept-url pattern="/**" access="isAuthenticated()" />
-		<form-login login-processing-url="/login" username-parameter="email" password-parameter="password"/>
-		<logout logout-url="/logout" delete-cookies="JSESSIONID" />
+		<form-login login-page="/login/index" default-target-url="/index"
+			username-parameter="email" password-parameter="password"
+			authentication-failure-url="/login/index?error=true"/>
+		<logout logout-url="/logout" delete-cookies="JSESSIONID"
+			invalidate-session="true" logout-success-url="/login/index" />
+		<csrf/>
+		<access-denied-handler error-page="/login/denied" />
+		<custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR" />
 	</http>
+	
 	<beans:bean id="userDetailService" class="com.oh.security.UserDetailService" />
-	<authentication-manager>
-		<authentication-provider user-service-ref="userDetailService"></authentication-provider>
+	<beans:bean id="myAccessDecisionManager" class="com.oh.security.MyAccessDecisionManager" />
+	
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailService">
+			<password-encoder hash="sha" />
+		</authentication-provider>
 	</authentication-manager>
 
+
+	<beans:bean id="filterSecurityInterceptor"
+		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="myAccessDecisionManager" />
+		<beans:property name="securityMetadataSource" ref="mySecurityMetadataSource" />
+	</beans:bean>
 	<!-- CSRF protection. Here we only include the CsrfFilter instead of all 
 		of Spring Security. See http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/#csrf 
 		for more information on Spring Security's CSRF protection -->
 	<beans:bean id="csrfFilter"
 		class="org.springframework.security.web.csrf.CsrfFilter">
 		<beans:constructor-arg>
-			<beans:bean
-				class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository" />
+			<beans:bean	class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+			    <beans:property name="headerName" value="X-SECURITY"></beans:property>
+			</beans:bean>
 		</beans:constructor-arg>
 	</beans:bean>
 

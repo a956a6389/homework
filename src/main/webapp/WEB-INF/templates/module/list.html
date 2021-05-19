@@ -15,7 +15,7 @@
         <table border="1">
             <tr>
                 <td>ID</td>
-                <td>ZN Name</td>
+                <td>CN Name</td>
                 <td>EN Name</td>
                 <td>URL</td>
                 <td>Enabled</td>
@@ -26,11 +26,11 @@
             </tr>
             <tr th:each="module, iterStat : ${modules}">
                 <td><a th:href="@{/module/view(id=${module.id})}" th:text="${module.id}"></a></td>
-                <td th:text="${module.znName}"></td>
+                <td th:text="${module.cnName}"></td>
                 <td th:text="${module.enName}"></td>
                 <td th:text="${module.url}"></td>
                 <td th:text="${module.urlEnabled}"></td>
-                <td th:text="${module.createDate}"></td>
+                <td th:text="${module.createdDate}"></td>
                 <td th:text="${module.createdBy}"></td>
                 <td th:text="${module.updatedDate}"></td>
                 <td th:text="${module.updatedBy}"></td>

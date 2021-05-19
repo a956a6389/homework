@@ -1,8 +1,3 @@
-/**  
- * @Title: ModuleDao.java
- * @Package com.oh.service
- *
- */ 
 package com.oh.dao;
 
 import java.util.List;
@@ -22,11 +17,11 @@ public interface ModuleDao{
 	 * 
 	 * @Description: query modules and paging
 	 * @param module
-	 * @param start default 0
-	 * @param end   default 1
+	 * @param start 
+	 * @param limit 
 	 * @return List<Module>
 	 */
-	public List<Module> queryModules(Module module, Integer start, Integer end);
+	public List<Module> queryModules(Module module, Integer start, Integer limit);
 
 	/***
 	 * 
@@ -59,5 +54,7 @@ public interface ModuleDao{
 	 * @return
 	 */
 	public int updateModule(Module module) ;
+	
+	public Module queryModule(Module module);
 
 }
