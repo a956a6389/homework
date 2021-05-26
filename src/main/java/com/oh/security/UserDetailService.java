@@ -56,8 +56,8 @@ public class UserDetailService implements UserDetailsService {
 		user.setRole(roleMap.get(user.getRole().getId()));
 
 		Collection<GrantedAuthority> grantedAuths = obtionGrantedAuthorities(user);
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword().trim(), true,
-				true, true, true, grantedAuths);
+		return new CustomSecurityUser(user.getEmail(), user.getPassword().trim(), true,
+				true, true, true, grantedAuths, user.getId());
 	}
 
 	private Set<GrantedAuthority> obtionGrantedAuthorities(User user) {

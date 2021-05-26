@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.oh.Constant;
 import com.oh.bean.Role;
+import com.oh.bean.RoleModule;
+import com.oh.service.ModuleService;
 import com.oh.service.RoleService;
 
 /**
@@ -32,6 +34,9 @@ public class RolesController {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private ModuleService moduleService;
 
 	/**
 	 * 
@@ -44,6 +49,8 @@ public class RolesController {
 	public ModelAndView list(ModelAndView model){
 		model.setViewName("role/list");
 		model.addObject("roles", roleService.queryAllRoles());
+		model.addObject("modules", moduleService.queryModules(null, null, null));
+		model.addObject("roleModule", new RoleModule());
 		return model;
 	}
 	

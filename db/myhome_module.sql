@@ -36,7 +36,7 @@ CREATE TABLE `module` (
   `updated_by` bigint(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,6 +45,7 @@ CREATE TABLE `module` (
 
 LOCK TABLES `module` WRITE;
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
+INSERT INTO `module` VALUES (1,'User List','User List','/user/list',1,'2017-04-17 12:51:20',NULL,NULL,NULL),(2,'User Add','User Add','/user/add',1,'2017-04-17 12:51:20',NULL,'2017-04-25 14:34:29',9),(3,'Module List','Module List','/module/list',1,'2017-04-17 12:51:20',NULL,NULL,NULL),(4,'Module Add','Module Add','/module/add',1,'2017-04-17 12:51:20',NULL,NULL,NULL),(5,'/','/','/',1,'0201-04-17 09:52:21',NULL,NULL,NULL),(6,'/Index','/Index','/index',1,'0201-04-17 09:52:21',NULL,NULL,NULL),(7,'Role List','Role List','/role/list',1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-14 16:59:45
+-- Dump completed on 2017-04-26  9:09:20

@@ -27,15 +27,7 @@ import org.springframework.security.web.FilterInvocation;
  */
 public class MyAccessDecisionManager implements AccessDecisionManager {
 	private static Logger LOG = LoggerFactory.getLogger("run");
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.security.access.AccessDecisionManager#decide(org.
-	 * springframework.security.core.Authentication, java.lang.Object,
-	 * java.util.Collection)
-	 */
+	
 	@Override
 	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
 			throws AccessDeniedException, InsufficientAuthenticationException {

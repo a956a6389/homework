@@ -8,6 +8,8 @@ package com.oh.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * @ClassName: Module
  * @Description: TODO
@@ -24,7 +26,10 @@ public class Module implements Serializable {
 	
 	private Integer id;
 	private String cnName;
+	@NotBlank(message="EnName is required")
 	private String enName;
+	
+	@NotBlank(message="URL is required")
 	private String url;
 	private boolean urlEnabled = Boolean.TRUE.booleanValue();
 	private Date createdDate;

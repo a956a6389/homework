@@ -18,12 +18,12 @@
                 <span th:if="${#fields.hasErrors('cnName')}" th:class="error" th:errors="*{cnName}"/> 
 			</p>
 			<p>
-				<label for="enName" th:class="${#fields.hasErrors('enName')} ? 'error' : 'text-right'">EN Name : </label> 
+				<label for="enName" th:class="${#fields.hasErrors('enName')} ? 'error' : 'text-right'">*EN Name : </label> 
 				<input type="text" id="enName" name="enName" th:field="*{enName}" th:errorclass="fieldError"/>
                 <span th:if="${#fields.hasErrors('enName')}" th:class="error" th:errors="*{enName}"/> 
 			</p>
 			<p>
-				<label for="url" th:class="${#fields.hasErrors('url')} ? 'error' : 'text-right'">URL : </label> 
+				<label for="url" th:class="${#fields.hasErrors('url')} ? 'error' : 'text-right'">&nbsp;&nbsp;*URL : </label> 
 				<input type="text" id="url" name="url" th:field="*{url}" th:errorclass="fieldError"/>
                 <span th:if="${#fields.hasErrors('url')}" th:class="error" th:errors="*{url}"/> 
 			</p>

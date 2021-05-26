@@ -8,3 +8,21 @@
 .successMsg{
 	color: #0F0;
 }
+.error-404{
+	background-image: url("../images/404.jpg");
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+.role-list .role-module-form{
+	border: 1px solid #090909;
+	width: 400px;
+}
+.role-list .role-module-form .module-item{
+	list-style: none;
+}
+.hide{
+	display: none;
+}
+.show{
+	display: block;
+}

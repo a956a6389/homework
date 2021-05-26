@@ -3,16 +3,23 @@
  */
 package com.oh.controller;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +28,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.oh.Constant;
 import com.oh.bean.Module;
+import com.oh.converter.CustomDateEditor;
+import com.oh.security.CustomSecurityUser;
 import com.oh.service.ModuleService;
+import com.oh.util.DateUtil;
+import com.oh.util.UserUtil;
 
 /***
  * 
@@ -39,6 +50,11 @@ public class ModuleController {
 	@Autowired
 	private ModuleService moduleService;
 
+	@InitBinder
+	public void initBinder(WebDataBinder b) {  
+		b.registerCustomEditor(Date.class, new CustomDateEditor());  
+	} 
+	 
 	/***
 	 * 
 	* @Description: query all module info.
@@ -68,6 +84,8 @@ public class ModuleController {
 		}
 		
 		try {
+			module.setCreatedDate(DateUtil.now());
+			module.setCreatedBy(UserUtil.getPrincipal().getUserId());
 			moduleService.insert(module);
 		} catch (Exception e) {
 			LOG.error("Add module exception: {}", e.getMessage());
@@ -94,7 +112,7 @@ public class ModuleController {
 		ModelAndView model = new ModelAndView("module/add");
 		Module module = new Module();
 		module.setId(id);
-		model.addObject("module", moduleService.queryModules(module, null, null));
+		model.addObject("module", moduleService.selectOneModules(module));
 		model.addObject(Constant.TYPE, "Update");
 		model.addObject(Constant.ACTION, "/module/update");
 		return model;
@@ -106,11 +124,13 @@ public class ModuleController {
 		ModelAndView model = new ModelAndView("redirect:/module/list");
 		if(result.hasErrors() || null == module || !StringUtils.isNoneBlank(module.getUrl()) 
 				|| !StringUtils.isNoneBlank(module.getEnName())){
-			model.setViewName("redirect:/module/view");
+			model.setViewName("module/add");
 			return model;
 		}
 		
 		try {
+			module.setUpdatedDate(DateUtil.now());
+			module.setUpdatedBy(UserUtil.getPrincipal().getUserId());
 			moduleService.updateModule(module);
 		} catch (Exception e) {
 			LOG.error("Add module exception: {}", e.getMessage());

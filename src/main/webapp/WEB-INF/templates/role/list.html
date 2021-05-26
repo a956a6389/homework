@@ -2,8 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head>
-<meta charset="UTF-8" />
+<head th:replace="common/link::link(~{::title},~{})" >
 <title>Role List</title>
 </head>
 <body>
@@ -11,9 +10,8 @@
     <div th:if="${msg}" th:class="successMsg" th:text="${msg}"></div>
     <div>
         <a th:href="@{/role/add}">Add role</a> &nbsp;
-<!--         <a th:href="@{/role/delete}">Batch Delete role</a> -->
     </div>
-    <div>
+    <div th:class="role-list">
         <table border="1">
             <tr>
                 <td></td>
@@ -27,10 +25,23 @@
                 <td th:text="${role.roleName}"></td>
                 <td>
                      <a th:href="@{/role/update(id=${role.id})}">Edit role</a> |
-                     <a th:href="@{/role/delete(id=${role.id})}">Delete role</a>
+                     <a th:href="@{/role/delete(id=${role.id})}">Delete role</a> |
+                     <a href="javascript:void(0);" th:id="setting-module" th:attr="data-role-id=${role.id}">Setting module role</a>
                 </td>
             </tr>
         </table>
+        <br/>
+        <div th:if="${modules}" th:class="hide">
+            <form action="#" th:action="@{/role/addRoleModule}" th:object="${roleModule}" th:method="post" th:class="role-module-form">
+                <div th:each="module, iterStat : ${modules}">
+        	        <input th:type="checkbox" th:name="moduleId" th:value="${module.id}" th:text="${module.enName}">
+                </div>
+                <div>
+                    <input th:type="hidden" th:name="roleId">
+                    <input th:type="submit" th:value="Submit"/>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>

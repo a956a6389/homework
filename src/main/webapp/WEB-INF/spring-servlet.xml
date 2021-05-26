@@ -28,7 +28,17 @@
 
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<context:component-scan base-package="com.oh" />
-	<mvc:annotation-driven conversion-service="conversionService"/>
+	<mvc:annotation-driven conversion-service="conversionService">
+	   <mvc:message-converters>
+	       <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+	           <property name="supportedMediaTypes">    
+                    <list>    
+                        <value>application/json;charset=UTF-8</value>    
+                   </list>    
+                </property>  
+	       </bean>
+	   </mvc:message-converters>
+	</mvc:annotation-driven>
 	<!-- 默认servlet -->  
 <!--     <mvc:default-servlet-handler />  -->
 
@@ -61,7 +71,7 @@
 		<property name="characterEncoding" value="UTF-8" />
 	</bean>
 	
-	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<property name="converters">
 		    <set>
 		        <bean class="com.oh.converter.RoleGenericConverter"/>

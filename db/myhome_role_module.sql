@@ -30,7 +30,7 @@ CREATE TABLE `role_module` (
   `module_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +39,7 @@ CREATE TABLE `role_module` (
 
 LOCK TABLES `role_module` WRITE;
 /*!40000 ALTER TABLE `role_module` DISABLE KEYS */;
+INSERT INTO `role_module` VALUES (1,1,1),(2,3,2),(3,1,3),(4,3,4),(5,3,1),(6,3,3),(7,1,5),(8,1,6),(9,3,5),(10,3,6);
 /*!40000 ALTER TABLE `role_module` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-14 16:59:45
+-- Dump completed on 2017-04-26  9:09:20

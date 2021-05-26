@@ -30,7 +30,7 @@ CREATE TABLE `user_roles` (
   `role_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `user_roles` (
 
 LOCK TABLES `user_roles` WRITE;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES (1,2,3),(2,1,1),(3,2,1),(4,3,3),(5,4,1),(6,1,3),(7,1,1),(8,5,1),(9,7,1),(10,8,1),(11,12,1),(12,6,1),(13,10,1),(14,11,3),(15,9,1),(16,8,3),(17,7,2),(18,8,1),(19,10,1),(20,3,3),(21,9,1),(22,8,1);
+INSERT INTO `user_roles` VALUES (1,2,3),(2,1,1),(4,3,3),(5,4,1),(8,5,1),(9,7,1),(10,8,1),(11,12,1),(12,6,1),(13,10,1),(14,11,3),(15,9,3);
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-14 16:59:46
+-- Dump completed on 2017-04-26  9:09:21

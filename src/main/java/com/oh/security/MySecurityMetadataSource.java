@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -20,6 +18,7 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.oh.bean.Module;
 import com.oh.bean.Role;
@@ -52,15 +51,20 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 	 */
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
+		Collection<ConfigAttribute> configAttributes = null;
 		loadResourceDefine();
 		String requestUrl = ((FilterInvocation) object).getRequestUrl();
 		if(requestUrl.indexOf("?")>-1){
 			requestUrl = requestUrl.substring(0,requestUrl.indexOf("?"));
 		}
 		if(MapUtils.isNotEmpty(resourceMap)){
-			return resourceMap.get(requestUrl);
+			configAttributes = resourceMap.get(requestUrl);
 		}
-		return null;
+		if(CollectionUtils.isEmpty(configAttributes)){
+			configAttributes = new ArrayList<>();
+			configAttributes.add(new SecurityConfig("ROLE_USER"));
+		}
+		return configAttributes;
 	}
 
 	/*

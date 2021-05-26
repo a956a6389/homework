@@ -65,4 +65,11 @@ public interface ModuleService {
 	 * @return Map<Integer, Module>
 	 */
 	Map<Integer, Module> queryAllModulesMap();
+	
+	/***
+	 * 
+	 * @Description query one modules
+	 * @return
+	 */
+	Module selectOneModules(Module module);
 }

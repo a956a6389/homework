@@ -69,5 +69,5 @@
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
-<!--     <bean id="exceptionHandler" class="com.oh.comm.exception.MyExceptionHandler"/>  -->
+    <bean id="exceptionHandler" class="com.oh.exception.GlobalExceptionResolver"/> 
 </beans>

@@ -51,7 +51,13 @@ public class ModuleDaoImpl implements ModuleDao{
 	 */
 	@Override
 	public int insert(Module module){
-		Module exsitModule = baseDao.queryForObject("module.selectOneModule", module);
+		Module paramModule = new Module();
+		paramModule.setUrl(module.getUrl());
+		Map<String, Object> param = new HashMap<>(3);
+		param.put("module", paramModule);
+		param.put("start", 0);
+		param.put("limit", 1);
+		Module exsitModule = baseDao.queryForObject("module.queryModule", param);
 		if(null != exsitModule){
 			return 0;
 		}

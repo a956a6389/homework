@@ -134,7 +134,7 @@ public class UserController {
 		/*	model.setViewName("user/add");
 			model.addObject("roles", roleService.queryAllRoles());
 			model.addObject("statuss", UserStatus.values());*/
-			model.setViewName("redirect:/user/view");
+			model.setViewName("user/add");
 			return model;
 		}
 		

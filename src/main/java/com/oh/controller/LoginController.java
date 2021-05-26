@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.oh.bean.User;
+import com.oh.security.CustomSecurityUser;
+import com.oh.util.UserUtil;
 
 /**
  * @ClassName: LoginController
@@ -35,11 +37,8 @@ public class LoginController {
 	@RequestMapping("/login/denied")
 	public ModelAndView denied() {
 		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (null != auth && !(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			modelAndView.addObject("username", userDetail.getUsername());
-		}
+		CustomSecurityUser customSecurityUser = UserUtil.getPrincipal();
+		modelAndView.addObject("username", null != customSecurityUser ? customSecurityUser.getUsername() : null);
 		modelAndView.setViewName("/login/403");
 		setCommon(modelAndView, null);
 		return modelAndView;

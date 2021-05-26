@@ -98,4 +98,20 @@ public class ModuleServiceImpl implements ModuleService {
 		return moduleCacheMap;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.oh.service.ModuleService#selectOneModules(com.oh.bean.Module)
+	 */
+	@Override
+	public Module selectOneModules(Module module) {
+		Module retModule = moduleCacheMap.get(module.getId());
+		if(null == retModule){
+			List<Module> modules =  this.queryModules(module, 0, 1);
+			if(!CollectionUtils.isEmpty(modules)){
+				retModule = modules.get(0);
+				moduleCacheMap.put(module.getId(), retModule);
+			}
+		}
+		return retModule;
+	}
+
 }
