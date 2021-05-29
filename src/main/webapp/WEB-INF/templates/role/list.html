@@ -18,6 +18,7 @@
                 <td>ID</td>
                 <td>Role Name</td>
                 <td>Role Name</td>
+                <td></td>
             </tr>
             <tr th:each="role, iterStat : ${roles}">
                 <td><input type="checkbox" class="check-delete" th:attr="data-id=${role.id}"/></td>
@@ -26,22 +27,23 @@
                 <td>
                      <a th:href="@{/role/update(id=${role.id})}">Edit role</a> |
                      <a th:href="@{/role/delete(id=${role.id})}">Delete role</a> |
-                     <a href="javascript:void(0);" th:id="setting-module" th:attr="data-role-id=${role.id}">Setting module role</a>
+                     <a href="javascript:void(0);" th:class="setting-module" th:attr="data-role-id=${role.id}">Setting module role</a>
+                </td>
+                <td>
+                    <div th:if="${not #maps.isEmpty(roleModuleMaps)}" th:class="|hide module-div|" th:id="|role-module${role.id}|">
+			            <div th:each="module, iterStat : ${roleModuleMaps[role.id]}">
+			                <input th:type="checkbox" th:name="moduleId" th:value="${module.id}" th:text="${module.enName}" th:checked="module.checked">
+			            </div>
+			            <div>
+			                <input th:type="hidden" th:name="roleId">
+			                <input th:type="submit" th:value="Submit"/>
+			            </div>
+			        </div>
                 </td>
             </tr>
         </table>
         <br/>
-        <div th:if="${modules}" th:class="hide">
-            <form action="#" th:action="@{/role/addRoleModule}" th:object="${roleModule}" th:method="post" th:class="role-module-form">
-                <div th:each="module, iterStat : ${modules}">
-        	        <input th:type="checkbox" th:name="moduleId" th:value="${module.id}" th:text="${module.enName}">
-                </div>
-                <div>
-                    <input th:type="hidden" th:name="roleId">
-                    <input th:type="submit" th:value="Submit"/>
-                </div>
-            </form>
-        </div>
     </div>
+    <script type="text/javascript" th:src="@{/js/role/list.js?t=20170428001}"></script>
 </body>
 </html>

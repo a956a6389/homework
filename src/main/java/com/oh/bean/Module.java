@@ -36,6 +36,7 @@ public class Module implements Serializable {
 	private Date updatedDate;
 	private Long createdBy;
 	private Long updatedBy;
+	private Boolean checked = Boolean.FALSE;
 	
 	/**
 	 * @return the id
@@ -144,6 +145,18 @@ public class Module implements Serializable {
 	 */
 	public void setUpdatedBy(Long updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+	/**
+	 * @return the checked
+	 */
+	public Boolean getChecked() {
+		return checked;
+	}
+	/**
+	 * @param checked the checked to set
+	 */
+	public void setChecked(Boolean checked) {
+		this.checked = checked;
 	}
 
 }

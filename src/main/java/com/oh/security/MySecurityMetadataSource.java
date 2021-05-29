@@ -60,10 +60,10 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 		if(MapUtils.isNotEmpty(resourceMap)){
 			configAttributes = resourceMap.get(requestUrl);
 		}
-		if(CollectionUtils.isEmpty(configAttributes)){
+		/*if(CollectionUtils.isEmpty(configAttributes)){
 			configAttributes = new ArrayList<>();
 			configAttributes.add(new SecurityConfig("ROLE_USER"));
-		}
+		}*/
 		return configAttributes;
 	}
 

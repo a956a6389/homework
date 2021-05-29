@@ -91,16 +91,15 @@ public class RoleModuleServiceImpl implements RoleModuleService {
 		
 		List<RoleModule> roleModules = this.queryRoleModules(null, null, null);
 		Map<Integer, Role> roleCacheMap = roleService.queryAllRolesMap();
-		List<Role> roles = null;
 		for (RoleModule roleModule : roleModules) {
 			if(moduleRolesCache.containsKey(roleModule.getModuleId())){
-				roles = moduleRolesCache.get(roleModule.getModuleId());
+				List<Role> roles = moduleRolesCache.get(roleModule.getModuleId());
 				roles.add(roleCacheMap.get(roleModule.getRoleId()));
 			}else{
-				roles = new ArrayList<>(roleModules.size());
+				List<Role> roles = new ArrayList<>(roleModules.size());
 				roles.add(roleCacheMap.get(roleModule.getRoleId()));
+				moduleRolesCache.put(roleModule.getModuleId(), roles);
 			}
-			moduleRolesCache.put(roleModule.getModuleId(), roles);
 		}
 		return moduleRolesCache;
 	}
@@ -116,16 +115,16 @@ public class RoleModuleServiceImpl implements RoleModuleService {
 		
 		List<RoleModule> roleModules = this.queryRoleModules(null, null, null);
 		Map<Integer, Module> moduleCacheMap = moduleService.queryAllModulesMap();
-		List<Module> modules = null;
 		for (RoleModule roleModule : roleModules) {
-			if(moduleCacheMap.containsKey(roleModule.getRoleId())){
-				modules = roleModulesCache.get(roleModule.getRoleId());
-				modules.add(moduleCacheMap.get(roleModule.getModuleId()));
+			Module temp = moduleCacheMap.get(roleModule.getModuleId());
+			if(roleModulesCache.containsKey(roleModule.getRoleId())){
+				List<Module> modules = roleModulesCache.get(roleModule.getRoleId());
+				modules.add(temp);
 			}else{
-				modules = new ArrayList<>(roleModules.size());
-				modules.add(moduleCacheMap.get(roleModule.getModuleId()));
+				List<Module> modules = new ArrayList<>(roleModules.size());
+				modules.add(temp);
+				roleModulesCache.put(roleModule.getRoleId(), modules);
 			}
-			roleModulesCache.put(roleModule.getRoleId(), modules);
 		}
 		return roleModulesCache;
 	}
