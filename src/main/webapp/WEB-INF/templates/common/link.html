@@ -1,5 +1,8 @@
 <head th:fragment="link(title,links)">
   <meta charset="UTF-8" />
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  
   <title th:replace="${title}"></title>
   <!--/* Common styles and scripts */-->
   <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
