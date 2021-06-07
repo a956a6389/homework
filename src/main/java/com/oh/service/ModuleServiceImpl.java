@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.LRUMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,7 +26,7 @@ import com.oh.dao.ModuleDao;
  */
 @Service
 public class ModuleServiceImpl implements ModuleService {
-	private static Map<Integer, Module> moduleCacheMap = new HashMap<>();
+	private LRUMap moduleCacheMap = new LRUMap();
 	
 	@Autowired
 	private ModuleDao moduleDao;
@@ -87,15 +88,13 @@ public class ModuleServiceImpl implements ModuleService {
 	 */
 	@Override
 	public Map<Integer, Module> queryAllModulesMap() {
-		if(!CollectionUtils.isEmpty(moduleCacheMap)){
-			return moduleCacheMap;
-		}
-		
 		List<Module> modules = this.queryModules(null, null, null);
+		Map<Integer, Module> retMap = new HashMap<>(modules.size());
 		for (Module module : modules) {
 			moduleCacheMap.put(module.getId(), module);
+			retMap.put(module.getId(), module);
 		}
-		return moduleCacheMap;
+		return retMap;
 	}
 
 	/* (non-Javadoc)
@@ -103,7 +102,7 @@ public class ModuleServiceImpl implements ModuleService {
 	 */
 	@Override
 	public Module selectOneModules(Module module) {
-		Module retModule = moduleCacheMap.get(module.getId());
+		Module retModule = (Module) moduleCacheMap.get(module.getId());
 		if(null == retModule){
 			List<Module> modules =  this.queryModules(module, 0, 1);
 			if(!CollectionUtils.isEmpty(modules)){

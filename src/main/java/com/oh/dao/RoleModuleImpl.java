@@ -84,4 +84,21 @@ public class RoleModuleImpl implements RoleModuleDao {
 		return CollectionUtils.isEmpty(ms) ? null : ms.get(0);
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see com.oh.dao.RoleModuleDao#deleteRoleModuleByRoleIds(int[])
+	 * */
+	@Override
+	public int deleteRoleModuleByRoleIds(int[] ids) {
+		return baseDao.delete("roleModule.batchDeleteByRoleId", ids);
+	}
+
+	/**
+	 * @see com.oh.dao.RoleModuleDao#batchInsert(java.util.List)
+	 */
+	@Override
+	public int batchInsert(List<RoleModule> roleModules) {
+		return baseDao.insert("roleModule.batchInsert", roleModules);
+	}
+
 }

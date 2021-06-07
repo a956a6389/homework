@@ -38,6 +38,14 @@ public interface RoleModuleDao{
 	 * @return int
 	 */
 	public int deleteRoleModule(int id) ;
+	
+	/***
+	 * 
+	 * @Description: batch delete the roleModule by role ids
+	 * @param id
+	 * @return int
+	 */
+	public int deleteRoleModuleByRoleIds(int[] ids) ;
 
 	/***
 	 * 
@@ -56,5 +64,13 @@ public interface RoleModuleDao{
 	public int updateRoleModule(RoleModule roleModule) ;
 	
 	public RoleModule queryRoleModule(RoleModule roleModule);
+
+	/***
+	 * 
+	 * @Description: batch insert roleModule
+	 * @param roleModules
+	 * @return int
+	 */
+	public int batchInsert(List<RoleModule> roleModules);
 
 }

@@ -63,6 +63,9 @@
 				#{userId,jdbcType=VARCHAR},
 			</if>
 		</trim>
+		<selectKey resultType="java.lang.Integer" keyProperty="id">  
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
 	</insert>
 
 	<update id="update" parameterType="com.oh.bean.UserRole">

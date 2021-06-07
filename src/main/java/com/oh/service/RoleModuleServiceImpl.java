@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +27,6 @@ import com.oh.dao.RoleModuleDao;
  */
 @Service
 public class RoleModuleServiceImpl implements RoleModuleService {
-	private static Map<Integer, List<Role>> moduleRolesCache = new HashMap<>();
-	private static Map<Integer, List<Module>> roleModulesCache = new HashMap<>();
-	
 	@Autowired
 	private RoleModuleDao roleModuleDao;
 	
@@ -85,23 +81,20 @@ public class RoleModuleServiceImpl implements RoleModuleService {
 	 */
 	@Override
 	public Map<Integer, List<Role>> readModuleToRoles() {
-		if(MapUtils.isNotEmpty(moduleRolesCache)){
-			return moduleRolesCache;
-		}
-		
 		List<RoleModule> roleModules = this.queryRoleModules(null, null, null);
+		Map<Integer, List<Role>> retMap = new HashMap<>(roleModules.size());
 		Map<Integer, Role> roleCacheMap = roleService.queryAllRolesMap();
 		for (RoleModule roleModule : roleModules) {
-			if(moduleRolesCache.containsKey(roleModule.getModuleId())){
-				List<Role> roles = moduleRolesCache.get(roleModule.getModuleId());
+			if(retMap.containsKey(roleModule.getModuleId())){
+				List<Role> roles = retMap.get(roleModule.getModuleId());
 				roles.add(roleCacheMap.get(roleModule.getRoleId()));
 			}else{
 				List<Role> roles = new ArrayList<>(roleModules.size());
 				roles.add(roleCacheMap.get(roleModule.getRoleId()));
-				moduleRolesCache.put(roleModule.getModuleId(), roles);
+				retMap.put(roleModule.getModuleId(), roles);
 			}
 		}
-		return moduleRolesCache;
+		return retMap;
 	}
 
 	/* (non-Javadoc)
@@ -109,24 +102,37 @@ public class RoleModuleServiceImpl implements RoleModuleService {
 	 */
 	@Override
 	public Map<Integer, List<Module>> readRoleToModules() {
-		if(MapUtils.isNotEmpty(roleModulesCache)){
-			return roleModulesCache;
-		}
-		
 		List<RoleModule> roleModules = this.queryRoleModules(null, null, null);
+		Map<Integer, List<Module>> retMap = new HashMap<>(roleModules.size());
 		Map<Integer, Module> moduleCacheMap = moduleService.queryAllModulesMap();
 		for (RoleModule roleModule : roleModules) {
 			Module temp = moduleCacheMap.get(roleModule.getModuleId());
-			if(roleModulesCache.containsKey(roleModule.getRoleId())){
-				List<Module> modules = roleModulesCache.get(roleModule.getRoleId());
+			if(retMap.containsKey(roleModule.getRoleId())){
+				List<Module> modules = retMap.get(roleModule.getRoleId());
 				modules.add(temp);
 			}else{
 				List<Module> modules = new ArrayList<>(roleModules.size());
 				modules.add(temp);
-				roleModulesCache.put(roleModule.getRoleId(), modules);
+				retMap.put(roleModule.getRoleId(), modules);
 			}
 		}
-		return roleModulesCache;
+		return retMap;
+	}
+
+	/**
+	 * @see com.oh.service.RoleModuleService#deleteRoleModuleByRoleIds(int[])
+	 */
+	@Override
+	public int deleteRoleModuleByRoleIds(int[] ids) {
+		return roleModuleDao.deleteRoleModuleByRoleIds(ids);
+	}
+
+	/**
+	 * @see com.oh.service.RoleModuleService#batchInsert(java.util.List)
+	 */
+	@Override
+	public int batchInsert(List<RoleModule> roleModules) {
+		return roleModuleDao.batchInsert(roleModules);
 	}
 
 }

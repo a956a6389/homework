@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.oh.Constant;
 import com.oh.bean.User;
+import com.oh.common.Constant;
 import com.oh.service.RoleService;
 import com.oh.service.UserService;
 import com.oh.type.UserStatus;

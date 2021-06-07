@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +22,15 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.oh.Constant;
 import com.oh.bean.Module;
 import com.oh.bean.Role;
 import com.oh.bean.RoleModule;
+import com.oh.common.Constant;
+import com.oh.common.JsonResult;
 import com.oh.service.ModuleService;
 import com.oh.service.RoleModuleService;
 import com.oh.service.RoleService;
@@ -38,8 +43,8 @@ import com.oh.service.RoleService;
  *
  */
 @Controller
-@RequestMapping("/role")
 public class RolesController {
+	private static Logger LOG = LoggerFactory.getLogger("run");
 
 	@Autowired
 	private RoleService roleService;
@@ -57,7 +62,7 @@ public class RolesController {
 		// TODO Auto-generated constructor stub
 	}
 
-	@RequestMapping(value = "/list")
+	@RequestMapping(value = "/role/list")
 	public ModelAndView list(ModelAndView model) {
 		model.setViewName("role/list");
 		List<Role> roles = roleService.queryAllRoles();
@@ -73,19 +78,19 @@ public class RolesController {
 			return retMap;
 		}
 		Map<Integer, List<Module>> roleModuleMap = roleModuleService.readRoleToModules();
+		Map<Integer, Module> allModuleMaps = moduleService.queryAllModulesMap();
 		
 		for (Role role : roles) {
 			List<Module> checkedModules = roleModuleMap.get(role.getId());
-			Map<Integer, Module> allModuleMaps = moduleService.queryAllModulesMap();
-			Map<Integer, Module> tempMaps = new HashMap<>(allModuleMaps);
-			List<Module> temModule = new ArrayList<>(tempMaps.size());
+			List<Module> temModule = new ArrayList<>(allModuleMaps.size());
 			
-			for (Map.Entry<Integer, Module> entry : tempMaps.entrySet()) {
+			for (Map.Entry<Integer, Module> entry : allModuleMaps.entrySet()) {
 				if (null == entry || null == entry.getValue()) {
 					continue;
 				}
 
-				Module m = entry.getValue();
+				Module m = new Module();
+				BeanUtils.copyProperties(entry.getValue(), m);
 				if (!CollectionUtils.isEmpty(checkedModules)) {
 					for (Module checkModule : checkedModules) {
 						if (null == checkModule) {
@@ -106,7 +111,7 @@ public class RolesController {
 		return retMap;
 	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/role/add", method = RequestMethod.POST)
 	public ModelAndView add(ModelAndView model, @Valid Role role, BindingResult result) {
 		String view = "redirect:/role/list";
 		if (result.hasErrors() || null == role || !StringUtils.isNoneBlank(role.getRoleName())) {
@@ -133,7 +138,7 @@ public class RolesController {
 		return model;
 	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/role/add", method = RequestMethod.GET)
 	public ModelAndView add(ModelAndView model) {
 		model.setViewName("role/add");
 		model.addObject("role", new Role());
@@ -142,7 +147,7 @@ public class RolesController {
 		return model;
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	@RequestMapping(value = "/role/update", method = RequestMethod.GET)
 	public ModelAndView update(ModelAndView model, Integer id) {
 		model.setViewName("role/add");
 		Role role = new Role();
@@ -154,7 +159,7 @@ public class RolesController {
 		return model;
 	}
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/role/update", method = RequestMethod.POST)
 	public ModelAndView update(ModelAndView model, @Valid Role role, BindingResult result) {
 		String view = "redirect:/role/list";
 		if (result.hasErrors() || null == role || !StringUtils.isNoneBlank(role.getRoleName())) {
@@ -180,7 +185,7 @@ public class RolesController {
 		return model;
 	}
 
-	@RequestMapping(value = "/batchDelete", method = RequestMethod.POST)
+	@RequestMapping(value = "/role/batchDelete", method = RequestMethod.POST)
 	public ModelAndView batchDelete(ModelAndView model) {
 		int[] ids = new int[3];
 		roleService.batchDeleteRoles(ids);
@@ -189,11 +194,37 @@ public class RolesController {
 		return model;
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/role/delete", method = RequestMethod.GET)
 	public ModelAndView delete(ModelAndView model, Integer id) {
 		roleService.deleteRole(id);
 		model.setViewName("redirect:/role/list");
 		// model.addObject(Constant.MESSAGE, "Delete success.");
 		return model;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/ajax/role/addRoleModule", method = RequestMethod.POST)
+	public JsonResult addRoleModule(ModelAndView model,
+			@RequestParam Integer roleId, @RequestParam String moduleIds) {
+		JsonResult ret = new JsonResult();
+		try {
+			roleModuleService.deleteRoleModuleByRoleIds(new int[]{roleId});
+			List<RoleModule> roleModules = new ArrayList<>();
+			String[] moduleIdArr = StringUtils.split(moduleIds, Constant.COMMA_SYMBOL);
+			for (String str : moduleIdArr) {
+				RoleModule roleModule = new RoleModule();
+				roleModule.setRoleId(roleId);
+				roleModule.setModuleId(Integer.parseInt(str));
+				roleModules.add(roleModule);
+			}
+			roleModuleService.batchInsert(roleModules);
+			ret.setCode(1000);
+			ret.setMsg("Set role and module success.");
+		} catch (Exception e) {
+			LOG.error("", e);
+			ret.setCode(5000);
+			ret.setMsg("System error.");
+		}
+		return ret;
 	}
 }

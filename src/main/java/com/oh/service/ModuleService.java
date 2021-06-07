@@ -21,7 +21,7 @@ import com.oh.bean.Module;
 public interface ModuleService {
 	/***
 	 * 
-	 * @Description query modules
+	 * @Description query modules,not use the cache from DB
 	 * @return
 	 */
 	List<Module> queryModules(Module module, Integer start, Integer end);

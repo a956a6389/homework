@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.LRUMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import com.oh.dao.RoleDao;
 @Service
 public class RoleServiceImpl implements RoleService {
 	private static Logger LOG = LoggerFactory.getLogger("run");
-	private static Map<Integer, Role> roleCacheMap = new HashMap<>();
+	private LRUMap roleCacheMap = new LRUMap();
 	
 	@Autowired
 	private RoleDao roleDao;
@@ -68,7 +69,7 @@ public class RoleServiceImpl implements RoleService {
 	 * @see com.oh.service.RoleService#queryRole(com.oh.bean.Role)
 	 */
 	public Role queryRole(Role role) {
-		Role retRole = roleCacheMap.get(role.getId());
+		Role retRole = (Role) roleCacheMap.get(role.getId());
 		if(null != retRole){
 			return retRole;
 		}
@@ -109,15 +110,13 @@ public class RoleServiceImpl implements RoleService {
 	 */
 	@Override
 	public Map<Integer, Role> queryAllRolesMap() {
-		if(!CollectionUtils.isEmpty(roleCacheMap)){
-			return roleCacheMap;
-		}
-		
 		List<Role> roles = this.queryAllRoles();
+		Map<Integer, Role> retMap = new HashMap<>(roles.size());
 		for (Role role : roles) {
 			roleCacheMap.put(role.getId(), role);
+			retMap.put(role.getId(), role);
 		}
-		return roleCacheMap;
+		return retMap;
 	}
 
 }

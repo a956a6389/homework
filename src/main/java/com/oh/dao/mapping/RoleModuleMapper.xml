@@ -44,6 +44,26 @@
             #{id}
         </foreach>
     </delete>
+    
+    <delete id="batchDeleteByRoleId" parameterType="int">
+        delete from role_module where role_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into role_module (role_id, module_id)
+        values
+        <foreach item="module" collection="collection" separator=",">
+	        <trim prefix="(" suffix=")">
+	        	#{module.roleId,jdbcType=BIGINT},#{module.moduleId,jdbcType=BIGINT}
+	        </trim>
+        </foreach>
+        <selectKey resultType="java.lang.Integer" keyProperty="id">  
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
+    </insert>
 
     <insert id="insert" parameterType="com.oh.bean.RoleModule">
         insert into role_module
@@ -63,6 +83,9 @@
                 #{moduleId,jdbcType=BIGINT}
             </if>
         </trim>
+        <selectKey resultType="java.lang.Integer" keyProperty="id">  
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
     </insert>
 
     <update id="update" parameterType="com.oh.bean.RoleModule">

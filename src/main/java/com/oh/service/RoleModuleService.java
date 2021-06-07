@@ -63,4 +63,20 @@ public interface RoleModuleService {
 	Map<Integer, List<Role>> readModuleToRoles();
 	
 	Map<Integer, List<Module>> readRoleToModules();
+	
+	/***
+	 * 
+	 * @Description: batch delete the roleModule by role ids
+	 * @param id
+	 * @return int
+	 */
+	int deleteRoleModuleByRoleIds(int[] ids) ;
+	
+	/***
+	 * 
+	 * @Description batch insert role and module
+	 * @param roleModules
+	 * @return int
+	 */
+	int batchInsert(List<RoleModule> roleModules);
 }

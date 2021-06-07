@@ -3,7 +3,7 @@
  * @Package com.oh
  *
  */ 
-package com.oh;
+package com.oh.common;
 
 /**
  * @ClassName: Constant
@@ -18,5 +18,6 @@ public interface Constant {
 	public static final String ACTION = "action";
 	public static final String MESSAGE = "msg";
 	public static final String ERROR = "error";
+	public static final String COMMA_SYMBOL = ",";
 
 }
